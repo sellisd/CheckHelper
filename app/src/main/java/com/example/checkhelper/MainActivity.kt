@@ -43,10 +43,12 @@ class MainActivity : ComponentActivity() {
 //  plural for cent and vingt in some cases
 //  numbers larger than 1000
 //
-val units = arrayOf("", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix")
+val units = arrayOf("zero", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf")
 val tensA = arrayOf("dix", "onze", "douze", "treize", "quatorze", "quinze", "seize", "dix-sept", "dix-huit", "dix-neuf")
-val tensB = arrayOf("vingt", "trente", "quarante", "cinquante", "soixante", "soixante", "quatre-vingt", "quatre-vingt")
+val tensB = arrayOf("","","vingt", "trente", "quarante", "cinquante", "soixante", "soixante", "quatre-vingt", "quatre-vingt")
 val higherOrder = arrayOf("cent", "mille", "million", "milliard", "billion")
+
+
 
 fun dashOrNothing(word:String):String{
     if(word.isEmpty()){
@@ -64,7 +66,7 @@ fun numberToLettersHundreds(number:Int?):String{
         return("")
     }
     when(number){
-        0 -> return("zero")
+        0 -> return("zéro")
         in 1..99 -> return(numberToLetters(number))
         in 100..199 -> return(higherOrder[0] + dashOrNothing(numberToLetters(number-100*(number/100))))
         in 200..999 -> return(units[number/100] + dashOrNothing(higherOrder[0] + dashOrNothing(numberToLetters(number-100*(number/100)))))
@@ -73,14 +75,36 @@ fun numberToLettersHundreds(number:Int?):String{
 }
 
 fun numberToLetters(number:Int):String{
-    when(number){
-        in 0..10 -> return(units[number])
-        in 11..19 -> return(tensA[number-10])
-        in 20..69, in 80..89 -> return(tensB[number/10-2] + dashOrNothing(units[number%10]))
-        in 70..79, in 90..99 -> return(tensB[number/10-2]) + "-" + tensA[number%10]
+    if((number<0) or (number >99)){
+        return "Not implemented"
     }
-    return("Not implemented")
+    val decad:Int = number/10
+    val unit:Int = number%10
+    var firstPart = ""
+    var connector = ""
+    var secondPart = ""
+    if(decad == 0){
+        firstPart = units[unit]
+    }else if(decad == 1){
+        firstPart = tensA[unit]
+    }else if (decad in arrayOf(2,3,4,5,6,7,8,9)){
+        firstPart = tensB[decad]
+    }
+    if ((unit != 0) and (decad in arrayOf(2,3,4,5,6,8))){
+        secondPart = units[unit]
+    }else if(decad in arrayOf(7,9)){
+        secondPart = tensA[unit]
+    }
+    if(secondPart == ""){
+        connector = ""
+    }else if ((unit == 1) and (decad in arrayOf(2,3,4,5,6,7))){
+        connector = "-et-"
+    }else{
+        connector = "-"
+    }
+    return (firstPart + connector + secondPart)
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

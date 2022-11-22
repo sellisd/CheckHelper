@@ -147,7 +147,8 @@ fun Answer() {
     Column(
         Modifier
             .fillMaxWidth()
-            .padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally
+            .padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceAround
     ) {
         val textState = remember { mutableStateOf(TextFieldValue("13")) }
         val context = LocalContext.current
@@ -172,11 +173,15 @@ fun Answer() {
             modifier = Modifier.padding(16.dp)
         )
         SelectionContainer {
-            Text(numberToLettersHundreds(textState.value.text.toIntOrNull()),
-            style = MaterialTheme.typography.titleLarge)
+            Text(
+                numberToLettersHundreds(textState.value.text.toIntOrNull()),
+                style = MaterialTheme.typography.titleLarge
+            )
         }
-        Text(text = stringResource(R.string.footnote),
-        style = MaterialTheme.typography.bodySmall)
+        Text(
+            text = stringResource(R.string.footnote),
+            style = MaterialTheme.typography.bodySmall
+        )
         Text(text = "(Rectifications de l'orthographe-J.O. du 6-12-1990)",
             color = Color.Blue,
             style = MaterialTheme.typography.bodySmall,

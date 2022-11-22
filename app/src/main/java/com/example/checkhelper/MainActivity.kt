@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -143,7 +144,7 @@ fun Answer() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val textState = remember { mutableStateOf(TextFieldValue("13")) }
-            Text("Input a number:", modifier = Modifier.align(Alignment.Start))
+            Text(text = stringResource(R.string.input), modifier = Modifier.align(Alignment.Start))
             TextField(
                 value = textState.value,
                 onValueChange = { textState.value = it },

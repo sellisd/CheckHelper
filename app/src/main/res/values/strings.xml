@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CheckHelper</string>
+    <string name="input">Input a number:</string>
 </resources>

@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">CheckHelper</string>
     <string name="input">Saisir de chiffres:</string>
+    <string name="footnote">"L'application affiche les chiffres en français selon la réforme de l'orthographe de 1990 "</string>
 </resources>

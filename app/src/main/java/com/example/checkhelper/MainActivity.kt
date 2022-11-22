@@ -1,16 +1,22 @@
 package com.example.checkhelper
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -26,8 +32,7 @@ class MainActivity : ComponentActivity() {
             CheckHelperTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
                     Answer()
                 }
@@ -139,23 +144,48 @@ fun numberToLetters(decad: Int, unit: Int): String {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Answer() {
-        Column(
-            Modifier.fillMaxWidth().padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            val textState = remember { mutableStateOf(TextFieldValue("13")) }
-            Text(text = stringResource(R.string.input), modifier = Modifier.align(Alignment.Start))
-            TextField(
-                value = textState.value,
-                onValueChange = { textState.value = it },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                singleLine = true,
-                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
-                modifier=Modifier.padding(16.dp)
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        val textState = remember { mutableStateOf(TextFieldValue("13")) }
+        val context = LocalContext.current
+        val intent = remember {
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://www.academie-francaise.fr/sites/academie-francaise.fr/files/rectifications_1990.pdf")
             )
-            Text(numberToLettersHundreds(textState.value.text.toIntOrNull()))
         }
+
+        Text(
+            text = stringResource(R.string.input),
+            modifier = Modifier.align(Alignment.Start),
+            style = MaterialTheme.typography.titleLarge
+        )
+        TextField(
+            value = textState.value,
+            onValueChange = { textState.value = it },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+            singleLine = true,
+            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
+            modifier = Modifier.padding(16.dp)
+        )
+        SelectionContainer {
+            Text(numberToLettersHundreds(textState.value.text.toIntOrNull()),
+            style = MaterialTheme.typography.titleLarge)
+        }
+        Text(text = stringResource(R.string.footnote),
+        style = MaterialTheme.typography.bodySmall)
+        Text(text = "(Rectifications de l'orthographe-J.O. du 6-12-1990)",
+            color = Color.Blue,
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.clickable {
+                context.startActivity(intent)
+            })
+    }
 }
+
 
 @Preview(showBackground = true)
 @Composable

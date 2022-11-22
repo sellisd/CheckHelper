@@ -3,9 +3,7 @@ package com.example.checkhelper
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -15,7 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.checkhelper.ui.theme.CheckHelperTheme
 
 class MainActivity : ComponentActivity() {
@@ -138,21 +138,22 @@ fun numberToLetters(decad: Int, unit: Int): String {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Answer() {
-    Column(
-        Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        val textState = remember { mutableStateOf(TextFieldValue("13")) }
-        Text("Enter Number:")
-        TextField(
-            value = textState.value,
-            onValueChange = { textState.value = it },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-            singleLine = true
-        )
-        Text("Nombre en lettres:")
-        Text(textState.value.text + ": " + numberToLettersHundreds(textState.value.text.toIntOrNull()))
-    }
+        Column(
+            Modifier.fillMaxWidth().padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            val textState = remember { mutableStateOf(TextFieldValue("13")) }
+            Text("Input a number:", modifier = Modifier.align(Alignment.Start))
+            TextField(
+                value = textState.value,
+                onValueChange = { textState.value = it },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                singleLine = true,
+                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
+                modifier=Modifier.padding(16.dp)
+            )
+            Text(numberToLettersHundreds(textState.value.text.toIntOrNull()))
+        }
 }
 
 @Preview(showBackground = true)

@@ -7,11 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.TextField
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,68 +35,101 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// rules to do
-//  plural for cent and vingt in some cases
-//  numbers larger than 1000
-//
-val units = arrayOf("zero", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf")
-val tensA = arrayOf("dix", "onze", "douze", "treize", "quatorze", "quinze", "seize", "dix-sept", "dix-huit", "dix-neuf")
-val tensB = arrayOf("","","vingt", "trente", "quarante", "cinquante", "soixante", "soixante", "quatre-vingt", "quatre-vingt")
-val higherOrder = arrayOf("cent", "mille", "million", "milliard", "billion")
+val units = arrayOf("", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf")
+val tensA = arrayOf(
+    "dix",
+    "onze",
+    "douze",
+    "treize",
+    "quatorze",
+    "quinze",
+    "seize",
+    "dix-sept",
+    "dix-huit",
+    "dix-neuf"
+)
+val tensB = arrayOf(
+    "",
+    "",
+    "vingt",
+    "trente",
+    "quarante",
+    "cinquante",
+    "soixante",
+    "soixante",
+    "quatre-vingt",
+    "quatre-vingt"
+)
 
 
-
-fun dashOrNothing(word:String):String{
-    if(word.isEmpty()){
-        return("")
-    }else if (word == "un"){
-        return("-et-" + word)
-    }
-    else{
-        return("-" + word)
-    }
+fun decompose(number: Int): IntArray {
+    val unit: Int = number % 10
+    val decad: Int = (number / 10) % 10
+    val hundred: Int = (number / 100) % 10
+    return intArrayOf(hundred, decad, unit)
 }
 
-fun numberToLettersHundreds(number:Int?):String{
-    if(number == null){
-        return("")
+fun numberToLettersHundreds(number: Int?): String {
+    if (number == null) {
+        return ""
     }
-    when(number){
-        0 -> return("zéro")
-        in 1..99 -> return(numberToLetters(number))
-        in 100..199 -> return(higherOrder[0] + dashOrNothing(numberToLetters(number-100*(number/100))))
-        in 200..999 -> return(units[number/100] + dashOrNothing(higherOrder[0] + dashOrNothing(numberToLetters(number-100*(number/100)))))
-    }
-    return("Not implemented")
-}
-
-fun numberToLetters(number:Int):String{
-    if((number<0) or (number >99)){
+    if ((number < 0) or (number > 999)) {
         return "Not implemented"
     }
-    val decad:Int = number/10
-    val unit:Int = number%10
+    if (number == 0) {
+        return "zéro" // treat as special case
+    }
+    val decomposed: IntArray = decompose(number)
+    val hundred: Int = decomposed[0]
+    val decad: Int = decomposed[1]
+    val unit: Int = decomposed[2]
+    var prefixA = ""
+    var prefixB = ""
+    if (hundred == 0) {
+        prefixA = ""
+        prefixB = ""
+    } else if ((hundred == 1) and (decad == 0) and (unit == 0)) {
+        prefixB = "cent"
+    } else if ((hundred in arrayOf(2, 3, 4, 5, 6, 7, 8, 9)) and (decad == 0) and (unit == 0)) {
+        prefixB = "cents"
+    } else {
+        prefixB = "cent-"
+    }
+    if (hundred in arrayOf(2, 3, 4, 5, 6, 7, 8, 9)) {
+        prefixA = units[hundred] + "-"
+    }
+    return (prefixA + prefixB + numberToLetters(decad, unit))
+}
+
+fun numberToLetters(decad: Int, unit: Int): String {
+    if ((decad < 0) or (decad > 9) or (unit < 0) or (unit > 9)) {
+        return "Not implemented"
+    }
     var firstPart = ""
     var connector = ""
     var secondPart = ""
-    if(decad == 0){
+
+    if (decad == 0) {
         firstPart = units[unit]
-    }else if(decad == 1){
+    } else if (decad == 1) {
         firstPart = tensA[unit]
-    }else if (decad in arrayOf(2,3,4,5,6,7,8,9)){
+    } else if (decad in arrayOf(2, 3, 4, 5, 6, 7, 8, 9)) {
         firstPart = tensB[decad]
     }
-    if ((unit != 0) and (decad in arrayOf(2,3,4,5,6,8))){
+    if ((unit != 0) and (decad in arrayOf(2, 3, 4, 5, 6, 8))) {
         secondPart = units[unit]
-    }else if(decad in arrayOf(7,9)){
+    } else if (decad in arrayOf(7, 9)) {
         secondPart = tensA[unit]
     }
-    if(secondPart == ""){
+    if (secondPart == "") {
         connector = ""
-    }else if ((unit == 1) and (decad in arrayOf(2,3,4,5,6,7))){
+    } else if ((unit == 1) and (decad in arrayOf(2, 3, 4, 5, 6, 7))) {
         connector = "-et-"
-    }else{
+    } else {
         connector = "-"
+    }
+    if ((decad == 8) and (unit == 0)) {
+        secondPart += "s"
     }
     return (firstPart + connector + secondPart)
 }
@@ -109,8 +138,10 @@ fun numberToLetters(number:Int):String{
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Answer() {
-    Column(Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         val textState = remember { mutableStateOf(TextFieldValue("13")) }
         Text("Enter Number:")
         TextField(

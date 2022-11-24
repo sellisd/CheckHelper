@@ -58,13 +58,21 @@ class UnitTests{
     }
     @Test
     fun numberToLettersHundreds() {
-        assertEquals("Not implemented", numberToLettersHundreds(-1))
-        assertEquals("zéro", numberToLettersHundreds(0))
-        assertEquals("cent", numberToLettersHundreds(100))
-        assertEquals("cent-un", numberToLettersHundreds(101))
-        assertEquals("deux-cent-vingt", numberToLettersHundreds(220))
-        assertEquals("trois-cents", numberToLettersHundreds(300))
-        assertEquals("sept-cents", numberToLettersHundreds(700))
-        assertEquals("Not implemented", numberToLettersHundreds(1000))
+        assertEquals("Not implemented", numberToLettersHundreds(-1,0,0))
+        assertEquals("", numberToLettersHundreds(0,0,0)) // zero treated as special case in caller function
+        assertEquals("cent", numberToLettersHundreds(1,0,0))
+        assertEquals("cent-un", numberToLettersHundreds(1,0,1))
+        assertEquals("deux-cent-vingt", numberToLettersHundreds(2,2,0))
+        assertEquals("trois-cents", numberToLettersHundreds(3,0,0))
+        assertEquals("sept-cents", numberToLettersHundreds(7,0,0))
+        assertEquals("Not implemented", numberToLettersHundreds(10,0,0))
+    }
+    @Test
+    fun numberToLettersThousands(){
+        assertEquals("mille", numberToLettersThousands(1000))
+        assertEquals("zéro", numberToLettersThousands(0))
+        assertEquals("mille-un", numberToLettersThousands(1001))
+        assertEquals("quatre-vingt-deux-mille-quatre-vingt-onze", numberToLettersThousands(82091))
+        assertEquals("neuf-cent-quatre-vingt-dix-neuf-mille-neuf-cent-quatre-vingt-dix-neuf", numberToLettersThousands(999999))
     }
 }

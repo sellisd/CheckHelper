@@ -72,23 +72,59 @@ fun decompose(number: Int): IntArray {
     val unit: Int = number % 10
     val decad: Int = (number / 10) % 10
     val hundred: Int = (number / 100) % 10
-    return intArrayOf(hundred, decad, unit)
+    val thousand: Int = (number / 1000)
+    return intArrayOf(thousand, hundred, decad, unit)
 }
 
-fun numberToLettersHundreds(number: Int?): String {
+
+fun numberToLettersThousands(number: Int?): String {
     if (number == null) {
         return ""
     }
-    if ((number < 0) or (number > 999)) {
+    if ((number < 0) or (number > 999999)) {
         return "Not implemented"
     }
     if (number == 0) {
         return "zéro" // treat as special case
     }
     val decomposed: IntArray = decompose(number)
-    val hundred: Int = decomposed[0]
-    val decad: Int = decomposed[1]
-    val unit: Int = decomposed[2]
+    val thousand: Int = decomposed[0]
+    val hundred: Int = decomposed[1]
+    val decad: Int = decomposed[2]
+    val unit: Int = decomposed[3]
+    val thousands = decompose(thousand)
+    val t5 = thousands[1]
+    val t4 = thousands[2]
+    val t3 = thousands[3]
+
+    val partB: String = numberToLettersHundreds(hundred, decad, unit)
+    var prefixA: String = ""
+    var prefixB: String = ""
+    if (thousand == 0) {
+        prefixB = partB
+    } else if (thousand == 1) {
+        if (partB.isEmpty()) {
+            prefixB = "mille"
+        } else {
+            prefixB = "mille-" + partB
+        }
+    } else { //>1000
+        if (partB.isEmpty()) {
+            prefixB = "-mille"
+        } else {
+            prefixB = "-mille-" + partB
+        }
+        prefixA = numberToLettersHundreds(t5, t4, t3)
+    }
+    return prefixA + prefixB
+
+}
+
+
+fun numberToLettersHundreds(hundred: Int, decad: Int, unit: Int): String {
+    if ((hundred < 0) or (hundred > 9) or (decad < 0) or (decad > 9) or (unit < 0) or (unit > 9)) {
+        return "Not implemented"
+    }
     var prefixA = ""
     var prefixB = ""
     if (hundred == 0) {
@@ -147,7 +183,8 @@ fun Answer() {
     Column(
         Modifier
             .fillMaxWidth()
-            .padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally,
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceAround
     ) {
         val textState = remember { mutableStateOf(TextFieldValue("13")) }
@@ -174,13 +211,12 @@ fun Answer() {
         )
         SelectionContainer {
             Text(
-                numberToLettersHundreds(textState.value.text.toIntOrNull()),
+                numberToLettersThousands(textState.value.text.toIntOrNull()),
                 style = MaterialTheme.typography.titleLarge
             )
         }
         Text(
-            text = stringResource(R.string.footnote),
-            style = MaterialTheme.typography.bodySmall
+            text = stringResource(R.string.footnote), style = MaterialTheme.typography.bodySmall
         )
         Text(text = "(Rectifications de l'orthographe-J.O. du 6-12-1990)",
             color = Color.Blue,

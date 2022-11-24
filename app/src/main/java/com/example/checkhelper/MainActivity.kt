@@ -196,13 +196,14 @@ fun Answer() {
                 Uri.parse("https://www.academie-francaise.fr/sites/academie-francaise.fr/files/rectifications_1990.pdf")
             )
         }
-
-        Text(
-            text = stringResource(R.string.input),
-            modifier = Modifier.align(Alignment.Start),
-            style = MaterialTheme.typography.titleLarge
-        )
-        TextField(
+        SelectionContainer {
+            Text(
+                numberToLettersThousands(textState.value.text.toIntOrNull()),
+                style = MaterialTheme.typography.titleLarge
+            )
+        }
+        OutlinedTextField(
+            label={Text(stringResource(R.string.input))},
             value = textState.value,
             onValueChange = { textState.value = it },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
@@ -210,12 +211,6 @@ fun Answer() {
             textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
             modifier = Modifier.padding(16.dp)
         )
-        SelectionContainer {
-            Text(
-                numberToLettersThousands(textState.value.text.toIntOrNull()),
-                style = MaterialTheme.typography.titleLarge
-            )
-        }
         Text(
             text = stringResource(R.string.footnote), style = MaterialTheme.typography.bodySmall
         )

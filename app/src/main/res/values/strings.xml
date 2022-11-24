@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">CheckHelper</string>
-    <string name="input">Input a number:</string>
+    <string name="input">Input a number</string>
     <string name="footnote">"The app shows numbers in French according to the spelling reform of 1990 "</string>
 </resources>

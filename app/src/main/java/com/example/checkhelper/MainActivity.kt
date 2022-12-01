@@ -212,11 +212,13 @@ fun Answer() {
         }
         OutlinedTextField(label = { Text(stringResource(R.string.input)) },
             value = textState.value,
-            onValueChange = { textState.value = it },
+            onValueChange = {
+                if (it.text.length <= 6) textState.value = it
+                            },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
             singleLine = true,
             textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
         )
         Text(
             text = stringResource(R.string.footnote), style = MaterialTheme.typography.bodySmall

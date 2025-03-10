@@ -104,7 +104,7 @@ fun numberToLettersThousands(number: Int?): String {
 
     val partB: String = numberToLettersHundreds(hundred, decad, unit)
     var prefixA: String = ""
-    var prefixB: String = ""
+    var prefixB: String
     if (thousand == 0) {
         prefixB = partB
     } else if (thousand == 1) {
@@ -131,7 +131,7 @@ fun numberToLettersHundreds(hundred: Int, decad: Int, unit: Int): String {
         return "Not implemented"
     }
     var prefixA = ""
-    var prefixB = ""
+    var prefixB: String
     if (hundred == 0) {
         prefixA = ""
         prefixB = ""
@@ -153,7 +153,7 @@ fun numberToLetters(decad: Int, unit: Int): String {
         return "Not implemented"
     }
     var firstPart = ""
-    var connector = ""
+    var connector: String
     var secondPart = ""
 
     if (decad == 0) {

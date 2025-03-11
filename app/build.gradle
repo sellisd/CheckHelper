@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.checkhelper'
+    namespace 'com.sellisd.checkhelper'
     compileSdk 35
 
     defaultConfig {
-        applicationId "com.example.checkhelper"
+        applicationId "com.sellisd.checkhelper"
         minSdk 21
         targetSdk 35
         versionCode 2

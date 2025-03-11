@@ -1,4 +1,4 @@
-package com.example.checkhelper
+package com.sellisd.checkhelper
 
 import org.junit.Test
 

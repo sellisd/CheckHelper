@@ -1,4 +1,4 @@
-package com.example.checkhelper
+package com.sellisd.checkhelper
 
 import android.content.Intent
 import android.net.Uri
@@ -28,7 +28,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.checkhelper.ui.theme.CheckHelperTheme
+import com.sellisd.checkhelper.R
+import com.sellisd.checkhelper.ui.theme.CheckHelperTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

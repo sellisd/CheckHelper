@@ -1,4 +1,4 @@
-package com.example.checkhelper.ui.theme
+package com.sellisd.checkhelper.ui.theme
 
 import android.app.Activity
 import android.os.Build

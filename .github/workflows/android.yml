@@ -23,8 +23,9 @@ jobs:
     - name: Set up Android SDK
       uses: android-actions/setup-android@v3
       with:
-        sdk-platform: '15'
-        licenses: 'android-sdk-license-.+'
+        cmdline-tools-version: 'latest'
+        log-accepted-android-licenses: false
+        accept-android-licenses: true
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
